@@ -27,3 +27,25 @@ def get_missing_values(df):
     res = res.sort_values(by="Nombre de valeurs manquantes", ascending=False)
 
     return res
+
+
+# Explorer le dataset
+def get_value_counts(df):
+    """
+    Getting value counts in each columns to see if there is unuseful data
+
+    Args:
+        df : pandas data frame
+
+    Return:
+        data frame with column name and values
+    """
+    columns = df.columns.values
+    valueCount = []
+    for columnName in columns:
+        valueCount.append([columnName, df[columnName].value_counts().size])
+
+    res = pd.DataFrame(valueCount, columns=["Column", "Value Count"])
+    res = res.sort_values(by = "Value Count", ascending=True)
+
+    return res
