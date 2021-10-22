@@ -156,10 +156,20 @@ top10 = top10[["Movie Title","Release Year","Genre","Global Box Office ($)", "Pr
 
 
 # J'exporte les données en format csv et je la relie dans le script de @link exercice_partie_4.py
-# 1. md_mdf
+# md_mdf
 file_name = outputDirectory+"md_mdf.xlsx"
 # saving the excel
 md_mdf.to_excel(file_name)
+
+# 1. Genre
+genre = md_mdf.groupby("Genre").mean()
+genre["# of movies"] = md_mdf.groupby("Genre").size()
+genre = genre[["# of movies", "Profit Margin (%)", "Global Box Office ($)"]]
+
+file_name = outputDirectory+"genre.xlsx"
+# saving the excel
+genre.to_excel(file_name)
+
 
 # 2. Réalisateurs
 file_name = outputDirectory+"directorProfit.xlsx"
