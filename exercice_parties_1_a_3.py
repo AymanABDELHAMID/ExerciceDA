@@ -127,7 +127,7 @@ Cette étape d'analyse des données est importante pour ajouter les infos imorta
 """
 # Visuel 1
 # Profit Margin %
-md_mdf["Profit Margin (%)"] = (md_mdf["Profit ($)"])/(md_mdf["Global Box Office ($)"])*100.
+md_mdf["Profit Margin (%)"] = ((md_mdf["Profit ($)"])/(md_mdf["Global Box Office ($)"]))*100.
 
 # Visuel 2
 # Realisateurs et films
@@ -141,11 +141,12 @@ realisateur2 = realisateur2.sort_values(by = "Global Box Office ($)", ascending=
 # nous aurons besoins de release month
 md_mdf["Release Month"] = md_mdf["Theater Release"].dt.month
 md_mdf["Release Month Str"] = md_mdf["Release Month"].apply(lambda x: calendar.month_abbr[x])
-releaseMonthRevenueMean = md_mdf.groupby("Release Month Str").mean()
+releaseMonthRevenueMean = md_mdf.groupby(["Release Month Str", "Release Month"]).mean()
 releaseMonthRevenueMean = releaseMonthRevenueMean["Global Box Office ($)"]
-releaseMonthRevenueSum = md_mdf.groupby("Release Month Str").sum()
+releaseMonthRevenueSum = md_mdf.groupby(["Release Month Str", "Release Month"]).sum()
 releaseMonthRevenueSum = releaseMonthRevenueSum["Global Box Office ($)"]
 releaseMonthRevenue = pd.concat([releaseMonthRevenueMean, releaseMonthRevenueSum], axis=1)
+releaseMonthRevenue = releaseMonthRevenue.sort_values(by = "Release Month", ascending=True)
 
 
 # Visuel 4
@@ -162,7 +163,7 @@ file_name = outputDirectory+"md_mdf.xlsx"
 md_mdf.to_excel(file_name)
 
 # 1. Genre
-genre = md_mdf.groupby("Genre").mean()
+genre = md_mdf.groupby("Genre").sum()
 genre["# of movies"] = md_mdf.groupby("Genre").size()
 genre = genre[["# of movies", "Profit Margin (%)", "Global Box Office ($)"]]
 
